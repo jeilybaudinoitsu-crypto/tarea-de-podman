@@ -1,0 +1,27 @@
+class Neurona:
+    def __init__(self):
+        # Definimos los pesos y el sesgo que encontramos matemáticamente
+        self.w1 = -0.5
+        self.w2 = 1.5
+        self.b = -1.0
+        def predecir (self, x1, x2):
+            # Calculamos la salida de la neurona utilizando la función de activación escalón
+            z = self.w1 * x1 + self.w2 * x2 + self.b
+            if z >= 0:
+                return 1
+            else:
+                return 0
+    
+    def entrenar(self, x1, x2, resultado_deseado, tasa_aprendizaje=0.1):
+    # 1. Calculamos la predicción actual usando el método que ya creaste
+        prediccion = self.predecir(x1, x2)
+    
+    # 2. Calculamos el error
+        error = resultado_deseado - prediccion
+    
+    # 3. Ajustamos los pesos si hubo un error
+        self.w1 = self.w1 + (error * x1 * tasa_aprendizaje)
+        self.w2 = self.w2 + (error * x2 * tasa_aprendizaje)
+    
+    # El sesgo (b) no tiene entrada, así que solo usa el error y la tasa
+        self.b = self.b + (error * tasa_aprendizaje) 
