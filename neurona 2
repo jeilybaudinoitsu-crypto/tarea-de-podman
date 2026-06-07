@@ -1,0 +1,48 @@
+import random
+
+class Neurona:
+    def __init__(self):
+        # La neurona empieza sin saber nada, con números al azar entre -1 y 1
+        self.w1 = random.uniform(-1, 1)
+        self.w2 = random.uniform(-1, 1)
+        self.b = random.uniform(-1, 1)
+
+    def predecir(self, x1, x2):
+        z = (self.w1 * x1) + (self.w2 * x2) + self.b
+        if z >= 0:
+            return 1
+        else:
+            return 0
+
+    def entrenar(self, x1, x2, resultado_deseado, tasa_aprendizaje=0.1):
+        prediccion = self.predecir(x1, x2)
+        error = resultado_deseado - prediccion
+        
+        # Ajustamos los pesos y el sesgo usando el error
+        self.w1 = self.w1 + (error * x1 * tasa_aprendizaje)
+        self.w2 = self.w2 + (error * x2 * tasa_aprendizaje)
+        self.b = self.b + (error * tasa_aprendizaje)
+        # 1. Creamos nuestra neurona "ignorante"
+ia = Neurona()
+
+# 2. Le damos la tabla de verdad (Nuestros ejemplos reales)
+# [Clima (1=llueve, 0=sol), Tiempo (1=si, 0=no)] -> Resultado (1=correr, 0=no)
+datos_entrenamiento = [
+    (0, 0, 0),  # Buen clima, sin tiempo -> NO sale
+    (0, 1, 1),  # Buen clima, con tiempo -> SÍ sale
+    (1, 0, 0),  # Mal clima, sin tiempo -> NO sale
+    (1, 1, 0)   # Mal clima, con tiempo -> NO sale
+]
+
+# 3. ¡A entrenar por 100 épocas!
+print("Entrenando a la neurona...")
+for epoca in range(100):
+    for x1, x2, deseado in datos_entrenamiento:
+        ia.entrenar(x1, x2, deseado)
+
+print("¡Entrenamiento terminado!\n")
+
+# 4. Ponemos a prueba a nuestra IA entrenada
+print("--- PRUEBAS DE LA IA ---")
+print(f"Buen clima y con tiempo (Debería ser 1): {ia.predecir(0, 1)}")
+print(f"Lloviendo y con tiempo (Debería ser 0): {ia.predecir(1, 1)}")
